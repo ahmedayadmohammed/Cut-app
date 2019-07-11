@@ -1,0 +1,42 @@
+PODS:
+  - Alamofire (4.8.2)
+  - BonsaiController (5.0.3)
+  - lottie-ios (3.1.0)
+  - OneSignal (2.10.0)
+  - SDWebImage (4.4.6):
+    - SDWebImage/Core (= 4.4.6)
+  - SDWebImage/Core (4.4.6)
+  - SearchTextField (1.2.2)
+  - SwiftKeychainWrapper (3.3.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - BonsaiController
+  - lottie-ios
+  - OneSignal (< 3.0, >= 2.6.2)
+  - SDWebImage (~> 4.0)
+  - SearchTextField
+  - SwiftKeychainWrapper
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - BonsaiController
+    - lottie-ios
+    - OneSignal
+    - SDWebImage
+    - SearchTextField
+    - SwiftKeychainWrapper
+
+SPEC CHECKSUMS:
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  BonsaiController: e4b1e4272b7b11130b8d4b98dcd66d1450fb92ea
+  lottie-ios: 9467723922dfff46f6d4e3019c32594a62440b7c
+  OneSignal: 0f5ff711d9f25da54885e4ab06ef0abc221a46ef
+  SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
+  SearchTextField: a0992739d4b05dcbb40fb3a5cc6526bd991bdd23
+  SwiftKeychainWrapper: ef5ad793bc0e08e24a5913f28345b8f7bc8e4123
+
+PODFILE CHECKSUM: 0898b7966c6335f98cd0d76695c60b508e5d8c31
+
+COCOAPODS: 1.7.1
