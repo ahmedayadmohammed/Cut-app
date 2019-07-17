@@ -17,6 +17,8 @@ class EditTaskVC: UIViewController {
     @IBOutlet weak var TASKDATETXT: UITextField!
     @IBOutlet weak var EDITBUTTON: LoadingButton!
     @IBOutlet weak var EDITTASKBUTTON: UIButton!
+    @IBOutlet weak var DEADLINE: UITextField!
+    
     //    VIEWS
     @IBOutlet weak var TASKNAMEVIEW: UIView!
     @IBOutlet weak var EMPLOYENAMEVIEW: UIView!
@@ -34,6 +36,7 @@ class EditTaskVC: UIViewController {
         super.viewDidLoad()
         EDITTASKBUTTON.layer.cornerRadius = 5
         showDatePicker()
+        Startdatepicker()
         TASKNAMELABEL.text = TASKDETAIL?.name
         TASKID = TASKDETAIL?.id
         EMID = TASKDETAIL?.employeeID.id
@@ -90,6 +93,31 @@ class EditTaskVC: UIViewController {
         
     }
     
+    
+//    DEADLINE-PICKERVIEW
+    func Startdatepicker(){
+        //Formate Date
+        datePicker.datePickerMode = .dateAndTime
+        //ToolBar
+        let toolbar2 = UIToolbar();
+        toolbar2.sizeToFit()
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(Enddatepicker));
+        toolbar2.setItems([doneButton], animated: false)
+        DEADLINE.inputAccessoryView = toolbar2
+        DEADLINE.inputView = datePicker
+    }
+    @objc func Enddatepicker(){
+        
+        let formatter = DateFormatter()
+        formatter.timeStyle = .medium
+        formatter.dateFormat = "E, MMM d, yyyy h:mm a"
+        DEADLINE.text = formatter.string(from: datePicker.date)
+        self.view.endEditing(true)
+    }
+    
+    
+    
+//    START-DATE-PICKERVIEW
     func showDatePicker(){
         //Formate Date
         datePicker.datePickerMode = .dateAndTime
@@ -106,16 +134,17 @@ class EditTaskVC: UIViewController {
         
         let formatter = DateFormatter()
         formatter.timeStyle = .medium
-        formatter.dateFormat = "dd/MM/yyyy"
+        formatter.dateFormat = "E, MMM d, yyyy h:mm a"
         TASKDATETXT.text = formatter.string(from: datePicker.date)
         self.view.endEditing(true)
     }
 
     func UPDATETASKS(){
         guard let date = TASKDATETXT.text else {return}
+        guard let DEADLINE = DEADLINE.text else {return}
         guard let taskid = TASKID else {return}
         self.parameters["task_start"] = date
-        self.parameters["deadline"] = "9:00 am"
+        self.parameters["deadline"] = DEADLINE
         self.parameters["task_id"] = taskid
         print(parameters)
         LoginUser(vc: self, Loading: EDITBUTTON, url: get.root.TASK_UPDATE!, httpMethod:.post, parameters:self.parameters , headers: self.token) { (rest:Swift.Result<Errorresponse,Error>?) in

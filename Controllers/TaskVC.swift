@@ -15,6 +15,9 @@ class TaskVC: UIViewController {
     @IBOutlet weak var MYACTIVITY: UIActivityIndicatorView!
     var token:HTTPHeaders?
     var TASKS = [All]()
+
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         TABLEVIEW.reloadData()
@@ -52,7 +55,6 @@ class TaskVC: UIViewController {
                 switch output {
                 case .success(let ok):
                     self.TASKS = ok.all
-                    
                     if ok.all.count > 0{
                     ok.all[0].employeeID.id
                     } else{
@@ -84,11 +86,14 @@ extension TaskVC : UITableViewDelegate,UITableViewDataSource {
         let cell:TASKCELL = tableView.dequeueReusableCell(withIdentifier: "task") as! TASKCELL
         cell.TASKNAME.text = TASKS[indexPath.row].name
         cell.EMPLOYEENAME.text = TASKS[indexPath.row].employeeID.name
+        cell.ENDLABEL.text = TASKS[indexPath.row].taskStart
+        cell.ENDDATE.text = TASKS[indexPath.row].deadline
     return cell
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
     {
         
+
         let rotationTransform = CATransform3DTranslate(CATransform3DIdentity, 0, 50, 0)
         cell.layer.transform = rotationTransform
         cell.alpha = 0
@@ -162,7 +167,6 @@ extension TaskVC : UITableViewDelegate,UITableViewDataSource {
         //Present the alert controller
         present(alert, animated: true, completion: nil)
     }
-    
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

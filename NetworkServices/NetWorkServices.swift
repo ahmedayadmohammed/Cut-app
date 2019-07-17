@@ -60,7 +60,7 @@ import Lottie
 
                 do {
                     let output = try decoder.decode(Errorresponse.self, from: data)
-                    vc.alert(title: "ahmed there is some error", messsage: output.msg ?? "")
+                    vc.alert(title: "error", messsage: output.msg ?? "")
 
                 } catch let JsonError{
                     completion(.failure(JsonError))

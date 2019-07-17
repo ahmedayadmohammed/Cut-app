@@ -40,10 +40,14 @@
 		E70AE63022CCE17D00880CC8 /* AddTaskVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AE62F22CCE17D00880CC8 /* AddTaskVC.swift */; };
 		E70AE63422CCE8DF00880CC8 /* EditTaskVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AE63322CCE8DF00880CC8 /* EditTaskVC.swift */; };
 		E70AE63622CCEF2600880CC8 /* SEARCHEXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AE63522CCEF2600880CC8 /* SEARCHEXT.swift */; };
+		E70BC2E822DE2554008D1FB1 /* SIGN-UP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70BC2E722DE2554008D1FB1 /* SIGN-UP.swift */; };
 		E71B6DC622D4BD1000B78FBC /* UPLOADINGIMAGE.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71B6DC522D4BD1000B78FBC /* UPLOADINGIMAGE.swift */; };
 		E71B6DDE22D4CBC200B78FBC /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71B6DDD22D4CBC200B78FBC /* NotificationService.swift */; };
 		E71B6DE222D4CBC200B78FBC /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E71B6DDB22D4CBC200B78FBC /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E71B6DF122D5D62900B78FBC /* BIND-KEYBOARD.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71B6DF022D5D62900B78FBC /* BIND-KEYBOARD.swift */; };
+		E79985F722D9D216002DE459 /* PositionEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79985F622D9D216002DE459 /* PositionEmployee.swift */; };
+		E79985F922D9D241002DE459 /* positionemployeeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79985F822D9D241002DE459 /* positionemployeeCell.swift */; };
+		E79985FB22D9DC18002DE459 /* GET-EMPLOYEE-POSID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79985FA22D9DC18002DE459 /* GET-EMPLOYEE-POSID.swift */; };
 		E7B3BF0222CF64F50053C453 /* GET-ALL-EMPLOYEE.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B3BF0122CF64F50053C453 /* GET-ALL-EMPLOYEE.swift */; };
 		E7ED304722D0EC9600343F83 /* LOADING-BUTTON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7ED304622D0EC9600343F83 /* LOADING-BUTTON.swift */; };
 		E7ED304B22D2169E00343F83 /* REGISTER.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7ED304A22D2169E00343F83 /* REGISTER.swift */; };
@@ -112,6 +116,7 @@
 		E70AE62F22CCE17D00880CC8 /* AddTaskVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskVC.swift; sourceTree = "<group>"; };
 		E70AE63322CCE8DF00880CC8 /* EditTaskVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTaskVC.swift; sourceTree = "<group>"; };
 		E70AE63522CCEF2600880CC8 /* SEARCHEXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SEARCHEXT.swift; sourceTree = "<group>"; };
+		E70BC2E722DE2554008D1FB1 /* SIGN-UP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SIGN-UP.swift"; sourceTree = "<group>"; };
 		E71B6DC522D4BD1000B78FBC /* UPLOADINGIMAGE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UPLOADINGIMAGE.swift; sourceTree = "<group>"; };
 		E71B6DCD22D4CB2400B78FBC /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		E71B6DCF22D4CB2500B78FBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -119,6 +124,9 @@
 		E71B6DDD22D4CBC200B78FBC /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		E71B6DDF22D4CBC200B78FBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E71B6DF022D5D62900B78FBC /* BIND-KEYBOARD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BIND-KEYBOARD.swift"; sourceTree = "<group>"; };
+		E79985F622D9D216002DE459 /* PositionEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionEmployee.swift; sourceTree = "<group>"; };
+		E79985F822D9D241002DE459 /* positionemployeeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = positionemployeeCell.swift; sourceTree = "<group>"; };
+		E79985FA22D9DC18002DE459 /* GET-EMPLOYEE-POSID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GET-EMPLOYEE-POSID.swift"; sourceTree = "<group>"; };
 		E7B3BF0122CF64F50053C453 /* GET-ALL-EMPLOYEE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GET-ALL-EMPLOYEE.swift"; sourceTree = "<group>"; };
 		E7ED304622D0EC9600343F83 /* LOADING-BUTTON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LOADING-BUTTON.swift"; sourceTree = "<group>"; };
 		E7ED304A22D2169E00343F83 /* REGISTER.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = REGISTER.swift; sourceTree = "<group>"; };
@@ -219,6 +227,7 @@
 				E70AE63322CCE8DF00880CC8 /* EditTaskVC.swift */,
 				E708A73922D6306900D4651D /* SectionsVC.swift */,
 				E708A73D22D675AE00D4651D /* AddSections.swift */,
+				E79985F622D9D216002DE459 /* PositionEmployee.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -229,6 +238,7 @@
 				E7060C5C22CCBD92008DA14D /* ADDPERSONCELL.swift */,
 				E70AE62D22CCDADE00880CC8 /* TASKCELL.swift */,
 				E708A73B22D6308700D4651D /* SectionsCell.swift */,
+				E79985F822D9D241002DE459 /* positionemployeeCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -241,6 +251,8 @@
 				E7060C5222CB782F008DA14D /* ERROR-RESPONSE.swift */,
 				E707C08022CCF59C001D7910 /* SUGMODEL.swift */,
 				E7B3BF0122CF64F50053C453 /* GET-ALL-EMPLOYEE.swift */,
+				E79985FA22D9DC18002DE459 /* GET-EMPLOYEE-POSID.swift */,
+				E70BC2E722DE2554008D1FB1 /* SIGN-UP.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -467,8 +479,11 @@
 				E70AE63622CCEF2600880CC8 /* SEARCHEXT.swift in Sources */,
 				E708A73A22D6306900D4651D /* SectionsVC.swift in Sources */,
 				E7060C4422CB56AC008DA14D /* EmailValidation.swift in Sources */,
+				E79985F722D9D216002DE459 /* PositionEmployee.swift in Sources */,
+				E79985FB22D9DC18002DE459 /* GET-EMPLOYEE-POSID.swift in Sources */,
 				E7060C5122CB7769008DA14D /* LOGIN-RESPONSE.swift in Sources */,
 				E7060C5722CB7B68008DA14D /* HomeVC.swift in Sources */,
+				E70BC2E822DE2554008D1FB1 /* SIGN-UP.swift in Sources */,
 				E7ED304722D0EC9600343F83 /* LOADING-BUTTON.swift in Sources */,
 				E71B6DF122D5D62900B78FBC /* BIND-KEYBOARD.swift in Sources */,
 				E7060C5922CB7E61008DA14D /* URL.swift in Sources */,
@@ -476,6 +491,7 @@
 				E708A73C22D6308700D4651D /* SectionsCell.swift in Sources */,
 				E7060C4D22CB5847008DA14D /* CONNECTIVITY-CHECKER.swift in Sources */,
 				E7060C6122CCCAFA008DA14D /* EmployeFormVC.swift in Sources */,
+				E79985F922D9D241002DE459 /* positionemployeeCell.swift in Sources */,
 				E7060C2C22CB5482008DA14D /* CleanerApp.xcdatamodeld in Sources */,
 				E7060C5F22CCBFB9008DA14D /* EmployeVC.swift in Sources */,
 				E70AE62C22CCD97000880CC8 /* TaskVC.swift in Sources */,

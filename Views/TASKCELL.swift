@@ -14,11 +14,13 @@ class TASKCELL: UITableViewCell {
     @IBOutlet weak var TASKNAME: UILabel!
     @IBOutlet weak var EMPLOYEENAME: UILabel!
     @IBOutlet weak var MAINCELLVIEW: UIView!
-    @IBOutlet weak var DATE: UILabel!
-    @IBOutlet weak var DATELABEL: UILabel!
+    @IBOutlet weak var ENDDATE: UILabel!
+    @IBOutlet weak var ENDLABEL: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
      MAINCELLVIEW.layer.cornerRadius = 10
+     MAINCELLVIEW.addShadow()
+        
 
     }
 

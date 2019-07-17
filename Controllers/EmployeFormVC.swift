@@ -38,6 +38,7 @@ class EmployeFormVC: UIViewController,UINavigationControllerDelegate {
     var LEVEL = ["","1","2","3"]
     var parameter:[String:String]!
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
         SHOWLEVELPICKER()
@@ -58,7 +59,6 @@ class EmployeFormVC: UIViewController,UINavigationControllerDelegate {
         POSTIONTXT.tag = 0
         POSTIONTXT.delegate = self
         checkPermission()
-        
         // ---------------------------------- SEACH SUGGESTIONS -----------------------------------------
         POSTIONTXT.getSug(vc: self, url: get.root.POSITION!, parameters: nil, header:self.token) { (name) in
             print(name)
@@ -75,6 +75,16 @@ class EmployeFormVC: UIViewController,UINavigationControllerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         //        ----------------------------------------------------------------------------------------
     }
+    
+
+    
+    
+    
+    
+ 
+    
+    
+    
     func checkPermission() {
         let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
         switch photoAuthorizationStatus {

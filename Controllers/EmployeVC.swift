@@ -17,19 +17,20 @@ class EmployeVC: UIViewController {
     @IBOutlet weak var MYACTIVITY: UIActivityIndicatorView!
     var token:HTTPHeaders?
     var ALLEMPLOYEE = [AllEmployee]()
-    
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
         self.navigationController?.isToolbarHidden = false
         ADDVIEW.layer.cornerRadius = 10
         token = ["token":KeychainWrapper.standard.string(forKey: "token") ?? ""]
         GETEMPLOYEE()
         MYACTIVITY.isHidden = false
         MYACTIVITY.startAnimating()
-
+        TABLEVIEW.reloadData()
     }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         GETEMPLOYEE()
@@ -48,7 +49,6 @@ class EmployeVC: UIViewController {
     }
     
     
-    
     @IBAction func CLOSEBUTTON(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -59,26 +59,32 @@ class EmployeVC: UIViewController {
         
         
     }
-    
-    
-  
-    
-    
+ 
     
     func GETEMPLOYEE(){
         
-        httpRequest(vc: self, url: get.root.GET_EMPLOYEE!, httpMethod: .get, parameters: nil, headers: self.token) { (rest:Swift.Result<Employee,Error>?) in
+        httpRequest(vc: self, url: get.root.GET_EMPLOYEE!, httpMethod: .get, parameters: nil, headers: self.token) { (rest:Swift.Result<EmployeeINFO,Error>?) in
             if let output = rest{
                 switch output {
                 case .success(let ok):
-                self.ALLEMPLOYEE = ok.allEmployee
-                self.TABLEVIEW.reloadData()
-                self.MYACTIVITY.isHidden = true
+                    if ok.allEmployee.count >= 1 {
+                        self.ALLEMPLOYEE = ok.allEmployee
+                        self.TABLEVIEW.reloadData()
+                        self.MYACTIVITY.isHidden = true
+                    } else{
+                        self.alert(title: "NO data", messsage: "There is no emplpoyee")
+                        self.MYACTIVITY.isHidden = true
+                    }
+               
                  print("FETCHING SUCCESS")
                 case .failure(let error):
                     print("there is some error ahmed in the employee\(error.localizedDescription)")
+                    self.MYACTIVITY.isHidden = true
+
                 default:
                     print("THERE IS ANOTHER ERROR WHILE FETCHING THE EMPLOYEE")
+                    self.MYACTIVITY.isHidden = true
+
                 }
             }
         }
@@ -101,10 +107,10 @@ extension EmployeVC : UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : ADDPERSONCELL = tableView.dequeueReusableCell(withIdentifier: "person") as! ADDPERSONCELL
         cell.PERSONENAME.text = ALLEMPLOYEE[indexPath.row].name
-        cell.POSTION.text = ALLEMPLOYEE[indexPath.row].position
-        cell.LOCATIONLABEL.text = ALLEMPLOYEE[indexPath.row].location
-        cell.EMAIL.text = ALLEMPLOYEE[indexPath.row].email
-        cell.PHONE.text = ALLEMPLOYEE[indexPath.row].phone.description
+//        cell.POSTION.text = ALLEMPLOYEE[indexPath.row].position
+//        cell.LOCATIONLABEL.text = ALLEMPLOYEE[indexPath.row].location
+//        cell.EMAIL.text = ALLEMPLOYEE[indexPath.row].email
+//        cell.PHONE.text = ALLEMPLOYEE[indexPath.row].phone.description
 //        cell.PERSONEIMAGE.sd_setImage(with: URL(string: "https://cleaner-task.herokuapp.com/api/v1/\(ALLEMPLOYEE[indexPath.row].image)")!)
         print("https://cleaner-task.herokuapp.com/\(ALLEMPLOYEE[indexPath.row].image)")
 
@@ -128,9 +134,11 @@ extension EmployeVC : UITableViewDelegate,UITableViewDataSource{
         
         return UISwipeActionsConfiguration(actions: [modifyAction])
     }
+    
+    
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
     {
-        
         let rotationTransform = CATransform3DTranslate(CATransform3DIdentity, 0, 50, 0)
         cell.layer.transform = rotationTransform
         cell.alpha = 0
@@ -138,8 +146,8 @@ extension EmployeVC : UITableViewDelegate,UITableViewDataSource{
             cell.layer.transform = CATransform3DIdentity
             cell.alpha = 1.0
         }
-        
-        
+
+
     }
     
     

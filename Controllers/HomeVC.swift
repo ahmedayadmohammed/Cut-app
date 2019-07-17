@@ -20,7 +20,6 @@ class HomeVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         ADDPERSONVIEW.layer.cornerRadius = 10
         ADDPERSONVIEW.addShadow()
         TASKSVIEW.layer.cornerRadius = 10
@@ -137,15 +136,7 @@ class HomeVC: UITableViewController {
          cell.layer.transform = CATransform3DIdentity
          cell.alpha = 1.0
          }
-        
-        
-//        let rotationTransform = CATransform3DTranslate(CATransform3DIdentity, 0, 50, 0)
-//        cell.layer.transform = rotationTransform
-//        cell.alpha = 0
-//        UIView.animate(withDuration: 0.75) {
-//            cell.layer.transform = CATransform3DIdentity
-//            cell.alpha = 1.0
-//        }
+
         
         
     }

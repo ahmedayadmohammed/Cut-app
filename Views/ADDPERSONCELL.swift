@@ -22,6 +22,7 @@ class ADDPERSONCELL: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         MAINVIEW.layer.cornerRadius = 10
+        MAINVIEW.addShadow()
 
     }
 

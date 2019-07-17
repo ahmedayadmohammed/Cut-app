@@ -10,7 +10,7 @@
 import Foundation
 
 // MARK: - Employee
-struct Employee: Codable {
+struct EmployeeINFO: Codable {
     let allEmployee: [AllEmployee]
 }
 

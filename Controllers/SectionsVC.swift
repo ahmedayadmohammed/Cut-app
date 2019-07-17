@@ -16,8 +16,10 @@ class SectionsVC: UIViewController {
     @IBOutlet weak var TABLEVIEW: UITableView!
     @IBOutlet weak var REFRESHBUTTON: LoadingButton!
     
+
     var token:HTTPHeaders?
     var POSITION = [Name]()
+    var prameters:Parameters = ["position_id":"0"]
     override func viewDidLoad() {
         super.viewDidLoad()
         REFRESHBUTTON.setImage(nil, for: .normal)
@@ -87,8 +89,28 @@ extension SectionsVC : UITableViewDelegate,UITableViewDataSource{
         cell.SECTIONNAME.text = POSITION[indexPath.row].name
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "pos", sender: POSITION[indexPath.row])
+
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dis=segue.destination as? PositionEmployee {
+            if let iph=sender as? Name{
+                dis.SECTIONID=iph
+            }
+        }
+    }
+
+    
+    
+    
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
     {
+        
+
         let rotationTransform = CATransform3DTranslate(CATransform3DIdentity, 0, 50, 0)
         cell.layer.transform = rotationTransform
         cell.alpha = 0
@@ -98,6 +120,70 @@ extension SectionsVC : UITableViewDelegate,UITableViewDataSource{
         }
         
         
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let modifyAction = UIContextualAction(style: .normal, title:  "Delete", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            DispatchQueue.main.async {
+                self.showDeleteWarning(for: indexPath)
+            }
+            
+            success(true)
+        })
+        
+        modifyAction.image = UIImage(named: "trash")
+        modifyAction.backgroundColor = #colorLiteral(red: 0.5612090826, green: 0.6885698438, blue: 0.7606660724, alpha: 1)
+        
+        return UISwipeActionsConfiguration(actions: [modifyAction])
+    }
+    
+    func showDeleteWarning(for indexPath: IndexPath) {
+        //Create the alert controller and actions
+        let alert = UIAlertController(title: "حذف قسم", message: "سوف تقوم بحذف قسم هل انت متأكد ؟", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            DispatchQueue.main.async {
+                
+                let id = self.POSITION[indexPath.row].id
+                self.prameters["position_id"] = id
+                print(id)
+                httpRequest(vc:self, url: get.root.DELETE_POSITION!, httpMethod: .post, parameters:self.prameters, headers: self.token
+                    , completion: { (rest:Swift.Result<Errorresponse,Error>?) in
+                        if let output = rest {
+                            switch output{
+                            case .success(let ok):
+                                print(ok.msg)
+                                self.alert(title: "Message", messsage: ok.msg?.description ?? "")
+                                DispatchQueue.main.async {
+                                    self.GETPOSITION()
+                                    self.TABLEVIEW.reloadData()
+                                }
+                            case .failure(let error):
+                                print("error \(error)")
+                            default:
+                                print("some error")
+                            }
+                            
+                            
+                        }else{
+                            self.alert(title: "delelted", messsage:"\(Errorresponse.init(msg:"message deleted"))")
+                            self.TABLEVIEW.deleteRows(at: [indexPath], with: .automatic)
+                        }
+                })
+            }
+            
+        }
+        
+        
+        
+        
+        //Add the actions to the alert controller
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        //Present the alert controller
+        present(alert, animated: true, completion: nil)
     }
 }
 extension SectionsVC: BonsaiControllerDelegate {

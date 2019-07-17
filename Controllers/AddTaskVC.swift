@@ -18,6 +18,9 @@ class AddTaskVC: UIViewController {
     @IBOutlet weak var EMPLOYENAME: SearchTextField!
     @IBOutlet weak var TASKDATE: UITextField!
     @IBOutlet weak var ENDDATE: UITextField!
+    @IBOutlet weak var TYPETXT: SearchTextField!
+    @IBOutlet weak var ENDDATEVIEW: UIView!
+    @IBOutlet weak var TASKTYPEVIEW: UIView!
     //    VIEWES
     
     @IBOutlet weak var TASKNAMEVIEW: UIView!
@@ -27,11 +30,13 @@ class AddTaskVC: UIViewController {
     let datePicker = UIDatePicker()
     var token:HTTPHeaders?
 //    var prameters:Parameters!
-    var prameters:Parameters = ["name":"","employee_id": "0","task_start":"","deadline":""]
+    var prameters:Parameters = ["name":"","employee_id": "0","task_start":"","deadline":"","type":""]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         Startdatepicker()
+        TASKTYPEVIEW.layer.cornerRadius = 10
+        ENDDATEVIEW.layer.cornerRadius = 10
         TASKNAMEVIEW.layer.cornerRadius = 10
         EMPLOYENAMEVIEW.layer.cornerRadius = 10
         TASKDATEVIEW.layer.cornerRadius = 10
@@ -43,20 +48,10 @@ class AddTaskVC: UIViewController {
         EMPLOYENAME.textAlignment = .left
         EMPLOYENAME.tag = 0
         EMPLOYENAME.delegate = self
+        TYPETXT.delegate = self
         showDatePicker()
-        
-                EMPLOYENAME.getSug(vc: self, url: get.root.ID_AND_NAMES!, parameters: nil, header:self.token) { (names) in
-            self.EMPLOYENAME.itemSelectionHandler(sugs: names, completionHandler: { (id) in
-                self.EMPLOYENAME.tag = 1
-                self.prameters["employee_id"] = id
-                print("this is employee id \(id)")
-            })
-        }
-        
-        
-        
-        
-        
+        EMsuggestions()
+        typeSuggestions()
         
         //        -------------------
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -66,9 +61,6 @@ class AddTaskVC: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
     }
-    
-    
-    
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -88,6 +80,32 @@ class AddTaskVC: UIViewController {
         }
     }
     
+    
+    func EMsuggestions(){
+        EMPLOYENAME.getSug(vc: self, url: get.root.ID_AND_NAMES!, parameters: nil, header:self.token) { (names) in
+            self.EMPLOYENAME.itemSelectionHandler(sugs: names, completionHandler: { (id) in
+                self.EMPLOYENAME.tag = 1
+                self.prameters["employee_id"] = id
+                print("this is employee id \(id)")
+            })
+        }
+    }
+    
+    func typeSuggestions(){
+        TYPETXT.getSug(vc: self, url: get.root.TASK_TYPE!, parameters: nil, header:self.token) { (names) in
+            self.TYPETXT.itemSelectionHandler(sugs: names, completionHandler: { (id) in
+                self.TYPETXT.tag = 1
+                self.prameters["type"] = id
+                print("this is employee id \(id)")
+            })
+        }
+    }
+    
+    
+    
+    
+    
+    
 //    END-DATE-PICKER
     func Startdatepicker(){
         //Formate Date
@@ -102,9 +120,10 @@ class AddTaskVC: UIViewController {
     }
     @objc func Enddatepicker(){
         
+//        Tuesday, July 16, 2019 10:53 AM"
         let formatter = DateFormatter()
-        formatter.timeStyle = .medium
-        formatter.dateFormat = "dd/MM/yyyy"
+        formatter.dateStyle = .full
+        formatter.dateFormat = "E, MMM d, yyyy h:mm a"
         ENDDATE.text = formatter.string(from: datePicker.date)
         self.view.endEditing(true)
     }
@@ -129,8 +148,8 @@ class AddTaskVC: UIViewController {
     @objc func donedatePicker(){
         
         let formatter = DateFormatter()
-        formatter.timeStyle = .medium
-        formatter.dateFormat = "dd/MM/yyyy"
+        formatter.timeStyle = .full
+        formatter.dateFormat = "E, MMM d, yyyy h:mm a"
         TASKDATE.text = formatter.string(from: datePicker.date)
         self.view.endEditing(true)
     }
@@ -157,15 +176,12 @@ class AddTaskVC: UIViewController {
         }
     
     func ADDTASK(){
-        
         guard let name = ADDTASKTXT.text else {return}
         guard let start = TASKDATE.text else {return}
         guard let endtime = ENDDATE.text else {return}
-        
         self.prameters["name"] = name
         self.prameters["task_start"] = start
         self.prameters["deadline"] = endtime
-        
         LoginUser(vc: self, Loading: ADDBUTTON, url: get.root.ADD_TASK!, httpMethod: .post, parameters: self.prameters, headers: self.token) { (rest:Swift.Result<Errorresponse,Error>?) in
             if let output = rest{
                 switch output{
@@ -180,16 +196,12 @@ class AddTaskVC: UIViewController {
                 }
             }
         }
-        
-        
-        
     }
 
     
     }
     
 
-    
 
 extension AddTaskVC : UITextFieldDelegate{
     
@@ -211,6 +223,11 @@ extension AddTaskVC : UITextFieldDelegate{
             EMPLOYENAME.startVisibleWithoutInteraction = true
         }else{
             EMPLOYENAME.startVisibleWithoutInteraction = false
+        }
+        if textField == TYPETXT{
+            TYPETXT.startVisibleWithoutInteraction = true
+        } else{
+            TYPETXT.startVisibleWithoutInteraction = false
         }
         return true
     }

@@ -27,5 +27,8 @@ struct get {
         static let DELETE_EMPLOYEE = URL(string: "\(BASEURL)/employee/delete")
         static let POSITION = URL(string: "\(BASEURL)/position/get")
         static let ADD_SECTIONS = URL(string: "\(BASEURL)/position/add")
+        static let GET_EMPLOYEE_BY_POSITIONS_ID = URL(string: "\(BASEURL)/position/employee")
+        static let DELETE_POSITION = URL(string: "\(BASEURL)/position/delete")
+        static let TASK_TYPE = URL(string: "\(BASEURL)/task/getype")
     }
 }

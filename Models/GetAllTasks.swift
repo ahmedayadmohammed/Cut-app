@@ -7,9 +7,8 @@
 //
 
 import Foundation
-import UIKit
 
-// MARK: - Gettasks
+// MARK: - Getemployee
 struct Gettasks: Codable {
     let all: [All]
 }
@@ -18,13 +17,15 @@ struct Gettasks: Codable {
 struct All: Codable {
     let id, name: String
     let employeeID: EmployeeID
+    let taskStart, deadline: String
     let done: Bool
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
         case name
         case employeeID = "employee_id"
-        case done
+        case taskStart = "task_start"
+        case deadline, done
     }
 }
 
@@ -37,5 +38,3 @@ struct EmployeeID: Codable {
         case name
     }
 }
-
-

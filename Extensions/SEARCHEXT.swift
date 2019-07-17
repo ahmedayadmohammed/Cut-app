@@ -16,7 +16,6 @@ extension SearchTextField{
     open override func awakeFromNib() {
 
         self.highlightAttributes = [NSAttributedString.Key.backgroundColor: UIColor.gray, NSAttributedString.Key.font:UIFont.boldSystemFont(ofSize: 12)]
-
         self.theme.font = UIFont.systemFont(ofSize: 17)
         self.theme.bgColor = UIColor (red: 0.9, green: 0.9, blue: 0.9, alpha: 0.9)
         self.theme.borderColor = UIColor (red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
