@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftKeychainWrapper
+import OneSignal
 
 class HomeVC: UITableViewController {
 
@@ -16,10 +17,11 @@ class HomeVC: UITableViewController {
     @IBOutlet weak var REVIEWVIEW: UIView!
     @IBOutlet weak var LOGOUTVIEW: UIView!
     @IBOutlet weak var SectionView: UIView!
-    
+    @IBOutlet weak var VACATIONVIEW: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getuserID()
         ADDPERSONVIEW.layer.cornerRadius = 10
         ADDPERSONVIEW.addShadow()
         TASKSVIEW.layer.cornerRadius = 10
@@ -30,20 +32,22 @@ class HomeVC: UITableViewController {
         LOGOUTVIEW.addShadow()
         SectionView.layer.cornerRadius = 10
         SectionView.addShadow()
+        VACATIONVIEW.layer.cornerRadius = 10
+        VACATIONVIEW.addShadow()
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.view.backgroundColor = .clear
+        self.navigationController?.viewControllers.removeSubrange(Range(0...0))
+       
 
         
-        let VCCount = self.navigationController!.viewControllers.count
-        if VCCount == 1 {
-            self.navigationController?.viewControllers.removeSubrange(Range(0...1))
-        }else{
-            self.navigationController?.viewControllers.removeSubrange(Range(0...0))
-        }
-
-        
+    }
+    
+    func getuserID(){
+        let status:OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
+        let userID = status.subscriptionStatus.userId
+        print("THIS IS USER IDDDDDD\(userID?.description)")
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
@@ -62,8 +66,6 @@ class HomeVC: UITableViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.view.backgroundColor = .clear
 
-
-
     }
     
   
@@ -73,10 +75,7 @@ class HomeVC: UITableViewController {
         self.present(SECTION, animated: true, completion: nil)
     }
     
-    
-    
-    
-    
+
     @IBAction func ADDPERSONBUTTON(_ sender: Any) {
         
         let PERSONVC = storyboard?.instantiateViewController(withIdentifier: "EployeeVC") as! EmployeVC
@@ -91,17 +90,18 @@ class HomeVC: UITableViewController {
         
     }
     
-    
     @IBAction func LOGOUTBUTTON(_ sender: Any) {
   
         let alertController = UIAlertController(title: "Log out", message: "Are you sure want to log out", preferredStyle: .alert)
         
         let withdrawAction = UIAlertAction(title: "Logout", style: .default) { (aciton) in
-            
             KeychainWrapper.standard.removeObject(forKey: "token")
+            KeychainWrapper.standard.removeObject(forKey: "type")
+
+            
             print("successfully signed out")
             let LoginC = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
-            self.present(LoginC, animated: true, completion: nil)
+            self.navigationController?.pushViewController(LoginC, animated: true)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
@@ -113,16 +113,23 @@ class HomeVC: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
         
     }
-    
-    
-
-    
-    
+ 
     @IBAction func REVIEWBUTTON(_ sender: Any) {
-        
+        let RVC = storyboard?.instantiateViewController(withIdentifier: "ReportsVC") as! ReportsVC
+        self.present(RVC, animated: true, completion: nil)
         
         
     }
+    
+    
+    
+    @IBAction func VACATIONSBUTTON(_ sender: Any) {
+        let VVC = storyboard?.instantiateViewController(withIdentifier: "VacationsVC") as! VacationsVC
+        self.present(VVC, animated: true, completion: nil)
+    }
+    
+    
+    
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
     {
@@ -136,8 +143,6 @@ class HomeVC: UITableViewController {
          cell.layer.transform = CATransform3DIdentity
          cell.alpha = 1.0
          }
-
-        
         
     }
 

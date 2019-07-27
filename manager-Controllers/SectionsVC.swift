@@ -49,19 +49,19 @@ class SectionsVC: UIViewController {
         self.GETPOSITION()
     }
     func GETPOSITION(){
-        LoginUser(vc: self, Loading: REFRESHBUTTON, url: get.root.POSITION!, httpMethod: .get, parameters: nil, headers: self.token) { (rest:Swift.Result<SugModel,Error>?) in
+        LoginUser(vc: self, Loading: REFRESHBUTTON, url: get.root.POSITION!, httpMethod: .get, parameters: nil, headers: self.token) { [weak self] (rest:Swift.Result<SugModel,Error>?) in
             if let output = rest {
                 switch output {
                 case .success(let ok):
-                    self.POSITION = ok.name!
-                    self.TABLEVIEW.reloadData()
-                    self.REFRESHBUTTON.hideLoading()
-                    self.REFRESHBUTTON.setImage(UIImage(named: "RefreshIcon"), for: .normal)
+                    self?.POSITION = ok.name!
+                    self?.TABLEVIEW.reloadData()
+                    self?.REFRESHBUTTON.hideLoading()
+                    self?.REFRESHBUTTON.setImage(UIImage(named: "RefreshIcon"), for: .normal)
                     print("Successfully fetching\(ok.name)")
                 case.failure(let error):
-                    self.REFRESHBUTTON.hideLoading()
-                    self.REFRESHBUTTON.setImage(UIImage(named: "RefreshIcon"), for: .normal)
-                    self.REFRESHBUTTON.setImage(UIImage(named: "RefreshIcon"), for: .normal)
+                    self?.REFRESHBUTTON.hideLoading()
+                    self?.REFRESHBUTTON.setImage(UIImage(named: "RefreshIcon"), for: .normal)
+                    self?.REFRESHBUTTON.setImage(UIImage(named: "RefreshIcon"), for: .normal)
                     print("\(error.localizedDescription)")
                     
                 default:

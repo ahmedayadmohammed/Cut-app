@@ -14,10 +14,8 @@ class TaskVC: UIViewController {
     @IBOutlet weak var TABLEVIEW: UITableView!
     @IBOutlet weak var MYACTIVITY: UIActivityIndicatorView!
     var token:HTTPHeaders?
-    var TASKS = [All]()
+   lazy var TASKS = [All]()
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         TABLEVIEW.reloadData()
@@ -29,7 +27,7 @@ class TaskVC: UIViewController {
         self.navigationController?.view.backgroundColor = .clear
 //        token = ["token":KeychainWrapper.standard.string(forKey: "token") ?? ""]
           token = ["Content-Type":"application/x-www-form-urlencoded","token":KeychainWrapper.standard.string(forKey: "token") ?? ""]
-        GETALLTASK()
+//        GETALLTASK()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,7 +40,6 @@ class TaskVC: UIViewController {
         weak var ADDTASKVC=storyboard?.instantiateViewController(withIdentifier: "AddTaskVC") as? AddTaskVC
         self.present(ADDTASKVC!, animated: true, completion: nil)
         
-        
     }
     
     @IBAction func CLOSEBUTTON(_ sender: Any) {
@@ -50,19 +47,19 @@ class TaskVC: UIViewController {
     }
     
     func GETALLTASK(){
-        httpRequest(vc: self, url: get.root.GET_ALL_TASK!, httpMethod: .get, parameters: nil, headers: self.token) { (rest:Swift.Result<Gettasks,Error>?) in
+        httpRequest(vc: self, url: get.root.GET_ALL_TASK!, httpMethod: .get, parameters: nil, headers: self.token) { [weak self] (rest:Swift.Result<Gettasks,Error>?) in
             if let output = rest {
                 switch output {
                 case .success(let ok):
-                    self.TASKS = ok.all
+                    self?.TASKS = ok.all
                     if ok.all.count > 0{
                     ok.all[0].employeeID.id
                     } else{
                        print("no data")
                     }
-                    self.MYACTIVITY.isHidden = true
-                    self.MYACTIVITY.stopAnimating()
-                    self.TABLEVIEW.reloadData()
+                    self?.MYACTIVITY.isHidden = true
+                    self?.MYACTIVITY.stopAnimating()
+                    self?.TABLEVIEW.reloadData()
                 case .failure(let error) :
                     print("t\(error)")
                 default:
@@ -102,9 +99,7 @@ extension TaskVC : UITableViewDelegate,UITableViewDataSource {
             cell.alpha = 1.0
         }
         
-        
     }
-    
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let modifyAction = UIContextualAction(style: .normal, title:  "Delete", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
@@ -133,14 +128,14 @@ extension TaskVC : UITableViewDelegate,UITableViewDataSource {
                 let id = self.TASKS[indexPath.row].id
                 let parameters:Parameters = ["task_id":id]
                 httpRequest(vc:self, url: get.root.DELETE_TASK!, httpMethod: .post, parameters:parameters, headers: self.token
-                    , completion: { (rest:Swift.Result<Errorresponse,Error>?) in
+                    , completion: { [weak self] (rest:Swift.Result<Errorresponse,Error>?) in
                         if let output = rest {
                             switch output{
                             case .success(let ok):
                                 print(ok.msg)
-                                self.alert(title: "Message", messsage: ok.msg?.description ?? "")
+                                self?.alert(title: "Message", messsage: ok.msg?.description ?? "")
                                 DispatchQueue.main.async {
-                                    self.GETALLTASK()
+                                    self?.GETALLTASK()
                                 }
                             case .failure(let error):
                                 print("error \(error)")
@@ -150,17 +145,14 @@ extension TaskVC : UITableViewDelegate,UITableViewDataSource {
                             
                             
                         }else{
-                            self.alert(title: "delelted", messsage:"\(Errorresponse.init(msg:"message deleted"))")
-                            self.TABLEVIEW.deleteRows(at: [indexPath], with: .automatic)
+                            self?.alert(title: "delelted", messsage:"\(Errorresponse.init(msg:"message deleted"))")
+                            self?.TABLEVIEW.deleteRows(at: [indexPath], with: .automatic)
                         }
                 })
             }
             
         }
 
-        
-
-        
         //Add the actions to the alert controller
         alert.addAction(cancelAction)
         alert.addAction(deleteAction)

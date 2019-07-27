@@ -12,9 +12,5 @@ import Foundation
 class Loginresponse: Codable {
     let token, type: String?
     
-    init(token: String?, type: String?) {
-        self.token = token
-        self.type = type
-    }
 }
 

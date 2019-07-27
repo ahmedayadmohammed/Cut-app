@@ -10,6 +10,7 @@ import UIKit
 import SwiftKeychainWrapper
 import Alamofire
 import Lottie
+import OneSignal
 class LoginVC: UIViewController {
 
     
@@ -20,17 +21,14 @@ class LoginVC: UIViewController {
     @IBOutlet weak var LOGINBUTTON: LoadingButton!
     
     
-    
-    
 //    VARIABLES
     lazy var animationView = AnimationView(name: "196-material-wave-loading")
-
-    
-    
+    let status:OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
+    var userID:String!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-   
+        userID = status.subscriptionStatus.userId
+        self.navigationController?.viewControllers.removeSubrange(Range(0...0))
         LOGINBUTTON.layer.cornerRadius = 10
         LOGINBUTTON.addShadow()
         EmailView.layer.cornerRadius = 10
@@ -70,22 +68,19 @@ class LoginVC: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.view.backgroundColor = .clear
     }
-    
-    
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
-    
     @objc func keyboardWillChange(notification: Notification){
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             if notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification {
-                self.view.frame.origin.y = -keyboardHeight + 70
+                self.view.frame.origin.y = -keyboardHeight + 130
             } else {
                 self.view.frame.origin.y = 0
             }
@@ -117,39 +112,49 @@ class LoginVC: UIViewController {
         }
     }
     
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
    
     
-    
-    
 //    LOGIN FUNCTIONALITY WITH EMAIL AND THE PASSWORD FOR THE USER ...
     func LOGINMETHODE(){
+    
+        
         guard let email = EMAILTXT.text else {return}
         guard let password = PASSWORDTXT.text else {return}
         if email != "" && password != "" {
-            let parameters:Parameters = ["name":email,"password":password]
-            LoginUser(vc: self, Loading: LOGINBUTTON, url:get.root.LOGIN!, httpMethod: .post, parameters:parameters, headers:nil) { (rest:Swift.Result<Loginresponse,Error>?) in
+            let parameters:Parameters = ["name":email,"password":password,"player_id":userID!]
+            LoginUser(vc: self, Loading: LOGINBUTTON, url:get.root.LOGIN!, httpMethod: .post, parameters:parameters, headers:nil) { [weak self] (rest:Swift.Result<Loginresponse,Error>?) in
                 if let data = rest {
                     switch data{
                     case .success(let ok) :
-                        self.LOGINBUTTON.hideLoading()
-                            KeychainWrapper.standard.set(ok.token!, forKey: "token")
-                            KeychainWrapper.standard.set(ok.type!, forKey: "type")
-                        let HOMEVC = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
-                        self.navigationController?.pushViewController(HOMEVC, animated: true)
-                        
+                        KeychainWrapper.standard.set(ok.token!, forKey: "token")
+                        KeychainWrapper.standard.set(ok.type!, forKey: "type")
+                        print("this is the type :\(ok.type)")
+                        if ok.type == "1"{
+                                self?.LOGINBUTTON.hideLoading()
+                                let HOMEVC = self?.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+                                self?.navigationController?.pushViewController(HOMEVC, animated: true)
+                            print("one is working")
+                        } else if ok.type == "2" {
+                            self?.LOGINBUTTON.hideLoading()
+                            let emvc = self?.storyboard?.instantiateViewController(withIdentifier: "EMVC") as! EMVC
+                            self?.navigationController?.pushViewController(emvc, animated: true)
+                            print("two is working")
+                        }else {
+                            print("there is an error")
+                        }
+                      
                     case .failure(let error) :
-                        self.LOGINBUTTON.hideLoading()
-                        self.alert(title: "خطأ", messsage: "\(error.localizedDescription)", buttonTitle: "OK", completion: {
-                        self.LOGINBUTTON.hideLoading()
+                        self?.LOGINBUTTON.hideLoading()
+                        self?.alert(title: "خطأ", messsage: "\(error.localizedDescription)", buttonTitle: "OK", completion: {
+                        self?.LOGINBUTTON.hideLoading()
                         })
                         
                     default:
                         print("ANOTHER ERROR OCCURED WHILE LOGIN THE USER")
-                         self.LOGINBUTTON.hideLoading()
+                         self?.LOGINBUTTON.hideLoading()
                     }
                 }
             }

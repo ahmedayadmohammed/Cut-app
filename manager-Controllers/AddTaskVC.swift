@@ -29,7 +29,6 @@ class AddTaskVC: UIViewController {
    
     let datePicker = UIDatePicker()
     var token:HTTPHeaders?
-//    var prameters:Parameters!
     var prameters:Parameters = ["name":"","employee_id": "0","task_start":"","deadline":"","type":""]
     
     override func viewDidLoad() {
@@ -55,9 +54,9 @@ class AddTaskVC: UIViewController {
         
         //        -------------------
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
     }
@@ -73,7 +72,8 @@ class AddTaskVC: UIViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             if notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification {
-                self.view.frame.origin.y = -keyboardHeight + 200
+                self.view.frame.origin.y = -keyboardHeight + 250
+
             } else {
                 self.view.frame.origin.y = 0
             }
@@ -127,11 +127,7 @@ class AddTaskVC: UIViewController {
         ENDDATE.text = formatter.string(from: datePicker.date)
         self.view.endEditing(true)
     }
-    
 
-    
-    
-    
 //    START-DATE-PICKER
     func showDatePicker(){
         //Formate Date
@@ -163,7 +159,9 @@ class AddTaskVC: UIViewController {
     @IBAction func ADDBUTTONPRESSED(_ sender: LoadingButton) {
         guard let taskname = ADDTASKTXT.text else {return}
         guard let taskdate = TASKDATE.text else {return}
-        if taskname != "" && taskdate != "" {
+        guard let employee = EMPLOYENAME.text else {return}
+        guard let deadline = ENDDATE.text else {return}
+        if taskname != "" && taskdate != "" && employee != "" && deadline != "" {
             sender.showLoading()
             ADDTASK()
             Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { (nil) in
@@ -182,16 +180,16 @@ class AddTaskVC: UIViewController {
         self.prameters["name"] = name
         self.prameters["task_start"] = start
         self.prameters["deadline"] = endtime
-        LoginUser(vc: self, Loading: ADDBUTTON, url: get.root.ADD_TASK!, httpMethod: .post, parameters: self.prameters, headers: self.token) { (rest:Swift.Result<Errorresponse,Error>?) in
+        LoginUser(vc: self, Loading: ADDBUTTON, url: get.root.ADD_TASK!, httpMethod: .post, parameters: self.prameters, headers: self.token) {[weak self] (rest:Swift.Result<Errorresponse,Error>?) in
             if let output = rest{
                 switch output{
                 case .success(let ok):
-                    self.ADDBUTTON.hideLoading()
-                    self.dismiss(animated: true, completion: nil)
+                    self?.ADDBUTTON.hideLoading()
+                    self?.dismiss(animated: true, completion: nil)
                     print(ok.msg)
-                self.alert(title: "Task added", messsage: "\(ok.msg?.description)")
+                self?.alert(title: "Task added", messsage: "\(ok.msg ?? "")")
                 case .failure(let error):
-                    self.ADDBUTTON.hideLoading()
+                    self?.ADDBUTTON.hideLoading()
                     print(error.localizedDescription)
                 }
             }

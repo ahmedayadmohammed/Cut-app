@@ -35,7 +35,7 @@ class EmployeFormVC: UIViewController,UINavigationControllerDelegate {
     var imagepicker:UIImagePickerController!
     lazy var advicePicker  = UIPickerView()
     let multiformdata=MultipartFormData()
-    var LEVEL = ["","1","2","3"]
+    lazy var LEVEL = ["","1","2","3"]
     var parameter:[String:String]!
 
 
@@ -76,14 +76,25 @@ class EmployeFormVC: UIViewController,UINavigationControllerDelegate {
         //        ----------------------------------------------------------------------------------------
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(true)
+        roundedimage()
+    }
+    
+    
+    func roundedimage(){
+        EMPLOYEIMAGE.layer.borderWidth = 1
+        EMPLOYEIMAGE.layer.masksToBounds = false
+        EMPLOYEIMAGE.layer.borderColor = UIColor.black.cgColor
+        EMPLOYEIMAGE.layer.cornerRadius = EMPLOYEIMAGE.frame.size.height/2
+        EMPLOYEIMAGE.clipsToBounds = true
+    }
+    
 
     
-    
-    
-    
- 
-    
-    
+
+//    check for photo library privacy to have an access to the photo library by user
     
     func checkPermission() {
         let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
@@ -124,16 +135,25 @@ class EmployeFormVC: UIViewController,UINavigationControllerDelegate {
             }
         }
     }
-    func roundedimage(){
-        EMPLOYEIMAGE.layer.borderWidth = 1
-        EMPLOYEIMAGE.layer.masksToBounds = false
-        EMPLOYEIMAGE.layer.borderColor = UIColor.black.cgColor
-        EMPLOYEIMAGE.layer.cornerRadius = EMPLOYEIMAGE.frame.height/2
-        EMPLOYEIMAGE.clipsToBounds = true
-    }
+  
 
     @IBAction func ADDBUTTONPRESSED(_ sender: Any) {
-            UPLOADPHOTO()
+        guard let image  = EMPLOYEIMAGE.image else {return}
+        guard let name  = USERNAMETXT.text else {return}
+        guard let phone = PHONENUMBERTXT.text else {return}
+        guard let email = EMAILTXT.text else {return}
+        guard let location = LOCATIONTXT.text else {return}
+        guard let position = POSTIONTXT.text else {return}
+        guard let level = LEVELTXT.text else {return}
+        guard let password = PASSWORD.text else {return}
+        if (image != UIImage(named: "") && name != "" && phone != "" && email != "" && location != "" && position != "" && level != ""
+            && password != ""){
+            self.UPLOADPHOTO()
+
+        } else {
+            self.alert(title: "Empty fields", messsage: "Please fill the fields")
+        }
+        
     }
 
     @IBAction func ADDIMAGEBUTTON(_ sender: Any) {
@@ -163,7 +183,6 @@ class EmployeFormVC: UIViewController,UINavigationControllerDelegate {
         view.endEditing(true)
     }
     func UPLOADPHOTO() {
-
         guard let name = USERNAMETXT.text else {return}
         guard let email = EMAILTXT.text else {return}
         guard let location = LOCATIONTXT.text else {return}

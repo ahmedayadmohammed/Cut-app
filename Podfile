@@ -17,7 +17,7 @@ target 'CleanerApp' do
 end
 
 
-target 'OneSignalNotificationServiceExtension' do
+target 'notificationService' do
   pod 'OneSignal', '>= 2.6.2', '< 3.0'
 end
 

@@ -18,6 +18,8 @@ class EditTaskVC: UIViewController {
     @IBOutlet weak var EDITBUTTON: LoadingButton!
     @IBOutlet weak var EDITTASKBUTTON: UIButton!
     @IBOutlet weak var DEADLINE: UITextField!
+    @IBOutlet weak var END_TIME_VIEW: UIView!
+    
     
     //    VIEWS
     @IBOutlet weak var TASKNAMEVIEW: UIView!
@@ -43,7 +45,9 @@ class EditTaskVC: UIViewController {
         TASKNAMEVIEW.layer.cornerRadius = 10
         EMPLOYENAMEVIEW.layer.cornerRadius = 10
         TASKDATEVIEW.layer.cornerRadius = 10
-//        token = ["token":KeychainWrapper.standard.string(forKey: "token") ?? ""]
+        END_TIME_VIEW.layer.cornerRadius = 10
+        
+        
         token = ["Content-Type":"application/x-www-form-urlencoded","token":KeychainWrapper.standard.string(forKey: "token") ?? ""]
         print(TASKID)
         print(EMID)
@@ -58,38 +62,46 @@ class EditTaskVC: UIViewController {
                  self.EMID = id
             })
         }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-    }
-    @objc func keyboardWillChange(notification: Notification){
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            if notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification {
-                self.view.frame.origin.y = -keyboardHeight + 200
-            } else {
-                self.view.frame.origin.y = 0
-            }
-        }
-    }
+//    deinit {
+//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+//    }
+//    @objc func keyboardWillChange(notification: Notification){
+//        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+//            let keyboardRectangle = keyboardFrame.cgRectValue
+//            let keyboardHeight = keyboardRectangle.height
+//            if notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification {
+//                self.view.frame.origin.y = -keyboardHeight + 200
+//            } else {
+//                self.view.frame.origin.y = 0
+//            }
+//        }
+//    }
  
     @IBAction func CLOSEBUTTON(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func EDITBUTTONPRESSED(_ sender: LoadingButton) {
-        sender.showLoading()
-        UPDATETASKS()
+        guard let thedate = TASKDATETXT.text else {return}
+        guard let thedeadline = DEADLINE.text else {return}
+        if thedate != "" && thedeadline != "" {
+            sender.showLoading()
+            UPDATETASKS()
+        } else {
+            self.alert(title: "Empty Fields", messsage: "Please fill the empty fields")
+        }
+        
+
         
     }
     
@@ -147,15 +159,15 @@ class EditTaskVC: UIViewController {
         self.parameters["deadline"] = DEADLINE
         self.parameters["task_id"] = taskid
         print(parameters)
-        LoginUser(vc: self, Loading: EDITBUTTON, url: get.root.TASK_UPDATE!, httpMethod:.post, parameters:self.parameters , headers: self.token) { (rest:Swift.Result<Errorresponse,Error>?) in
+        LoginUser(vc: self, Loading: EDITBUTTON, url: get.root.TASK_UPDATE!, httpMethod:.post, parameters:self.parameters , headers: self.token) { [weak self] (rest:Swift.Result<Errorresponse,Error>?) in
             if let data = rest {
                 switch data {
                 case .success(let ok) :
-                    self.EDITBUTTON.hideLoading()
-                    self.alert(title: "Updating successfull", messsage: "\(ok.msg ?? "")")
+                    self?.EDITBUTTON.hideLoading()
+                    self?.alert(title: "Updating successfull", messsage: "\(ok.msg ?? "")")
                 case .failure(let error):
                     print(error.localizedDescription)
-                    self.EDITBUTTON.hideLoading()
+                    self?.EDITBUTTON.hideLoading()
                 }
             }else{
                 print("there is some error while updating the tasks")
